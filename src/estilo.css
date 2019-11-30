@@ -1,0 +1,20 @@
+.root {
+    -fx-background: #eeeeee;
+    -fx-text-fill: #000000;
+    -fx-fill-width: 100%;
+    -fx-font-family: "Segoe UI Semibold";
+}
+.btn{
+    -fx-pref-width: 400;
+    -fx-pref-height: 200;
+    -fx-padding: 15 15 15 15;
+    -fx-background-radius: 0;
+    -fx-background-color: #33a399;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 4,0,0,1 );
+    -fx-font-weight: bold;
+    -fx-font-size: 10em;
+}
+.btn:pressed{
+    -fx-background-color: #3caf8e;
+    -fx-animated: inherit;
+}

@@ -1,0 +1,12 @@
+# Creado por el complemento de soporte .ignore (hsz.mobi)
+# ## Plantilla Java
+# Archivo de clase compilado
+* .class
+
+# Archivo de registro
+* .log
+
+.idea
+out
+desktop.ini
+fuera
