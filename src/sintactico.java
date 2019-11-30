@@ -27,7 +27,7 @@ public class sintactico {
 
                 }
             }
-        }
+        } error(1);
     }
     public void salto(){
         while(codigo[apuntador].token == 39) {
