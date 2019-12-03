@@ -1,7 +1,7 @@
 import java.io.*;
 
 public class Archivo {
-    public String leerCodigo(String ruta){
+    public String leerCodigo1(String ruta){
         int lines = 0;
         //Representa el texto dentro del archivo, por ahora, vacío.
         String texto = "";
@@ -26,7 +26,7 @@ public class Archivo {
                 //Si la línea no está vacía...
                 if(linea != null){
                     //Agregamos al búfer la línea y el salto de línea 'nl' (opcional)
-                    sbf.append(linea + nl);
+                    sbf.append(linea + "\n");
                 }
                 else{
                     //De lo contrario damos fin al ciclo while.
@@ -45,6 +45,35 @@ public class Archivo {
             e.printStackTrace();
         }
         //Devolvemos el texto.
+        return texto;
+    }
+    public String leerCodigo(String ruta){
+        String texto = "";
+        try {
+            FileReader fr = new FileReader(ruta);
+            BufferedReader br = new BufferedReader(fr);
+            String linea;
+
+            while((linea = br.readLine()) != null){
+                if (linea.length() == 0) linea = " ";
+                String espacio;
+                for (int i = linea.length()-1; i > 1 ; i--) {
+                    espacio = "";
+                    for (int j = 0; j < i; j++) {
+                        espacio+=" ";
+                    }
+                    linea = linea.replaceFirst(espacio, "");
+                    linea = linea.replaceAll(espacio, " ");
+                }
+                String uno = linea.charAt(0)+"";
+                if (uno.equals(" ") && linea.length() > 1) linea = linea.replaceFirst(" ", "");
+                texto+=linea+"\n";
+            }
+            fr.close();
+        }
+        catch(Exception e) {
+            System.out.println("Excepcion leyendo fichero "+ ruta + ": " + e);
+        }
         return texto;
     }
 }

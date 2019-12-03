@@ -1,16 +1,8 @@
-.TITLE nombre ;
-.VAR [
-$id1 ENT;
-$id2 BOOLE;
-$id3 WORD;
-#metodo1 {  } [
-
-]
-]
-.CODE [
+$caa
+ $asdas22sad2
 
 
-]
-.END
+                          IF
 
-
+     #metdo
+#me113

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class lexico {
     private String code;
     Archivo archivo;
-    ArrayList<tabla> codigoTokens;
+    tabla[] codigoTokens;
     ArrayList<String> codigoString;
     ArrayList<tabla> palabrasReservadas;
     ArrayList<tabla> delimitadores;
@@ -23,30 +23,28 @@ public class lexico {
         letras = new ArrayList<>();
         digitos = new ArrayList<>();
         nombre = new ArrayList<>();
-        codigoTokens = new ArrayList<>();
-        cargarLenguaje();
         code = archivo.leerCodigo("code.txt");
+        codigoTokens = new tabla[getTamano()];
+        cargarLenguaje();
         int errores = analizar();
-        System.out.println();
-        for (int i = 0; i < codigoTokens.size(); i++) {
-            System.out.print(codigoTokens.get(i)+" ");
-        }
-        System.out.println();
         if (errores != 0) System.out.println(codigoString.get(errores)+" No pertenece al lenguaje");
     }
-
-
     int analizar(){
         int error = 0;
         int i = 0;
         boolean valido = true;
-        while (i < codigoTokens.size() && valido){
+        while (i < codigoTokens.length && valido){
             String palabra = codigoString.get(i);
-            //System.out.print(palabra);
             int token = buscar(palabra);
-            if (token != 0) codigoTokens.get(i).setToken(i); // = token;
-            else valido = false;
+            if (token != 0) {
+                codigoTokens[i].setToken(token);
+                codigoTokens[i].setNombre(codigoString.get(i));
+            }
+            else{
+                valido = false;
+            }
             i++;
+
         }
         if (!valido) error = i-1;
         return error;
@@ -54,12 +52,11 @@ public class lexico {
 
     boolean coco = false;
     int buscar(String dato) {
-        System.out.print(dato);
         int existe = 0;
         int i ;
         if (!dato.equals("\n")) {
             if ((dato.equals("\"") || dato.equals("<!")) && !coco) coco = true;
-            else if ((dato.equals("\"") || dato.equals(">!")) && coco) coco = false;
+            else if ((dato.equals("\"") || dato.equals("!>")) && coco) coco = false;
             if (!coco) {
                 i = 0;
                 while (i < palabrasReservadas.size() && existe == 0) {
@@ -80,12 +77,16 @@ public class lexico {
                     }
                     i++;
                 }
-                if (dato.length() > 1 && existe == 0) { // nombres de id y metodos mayor a una letra o digito
+                if (dato.length() >= 1 && existe == 0) { // nombres de id y metodos mayor a una letra o digito
                     String c0 = "" + dato.charAt(0);
-                    if (c0.equals("$") || c0.equals("#")) existe = verificarNombre(dato);
+                    if (c0.equals("$") || c0.equals("#")) {
+                        existe = verificarNombre(dato);
+                    }
                 }
             } else {
-                existe = 800;
+                if (dato.equals("\"")) existe = 35;
+                else if (dato.equals("<!")) existe = 36;
+                else existe = 23;
             }
         }else existe = 39;
         return existe;
@@ -118,13 +119,14 @@ public class lexico {
             }
             if (b){
                 l = ""+dato.charAt(0);
-                if (l.equals("$")) no =  id_metodo; // codigo para ids
-                else no = id_metodo;
+                if (l.equals("$")) no =  idToken; // codigo para ids
+                else no = metodoToken;
             }
         }
         return no;
     }
-    int id_metodo = 101;
+    int metodoToken = 501;
+    int idToken = 101;
     void cargarLenguaje(){
         String[] prs = archivo.leerCodigo("palabrasReservadas.txt").split("\n");
         String[] ds = archivo.leerCodigo("delimitadores.txt").split("\n");
@@ -174,6 +176,9 @@ public class lexico {
             String token = separador[1];
             dato = new tabla(nombre, Integer.parseInt(token.trim()));
             this.nombre.add(dato);
+        }
+        for (int i = 0; i < codigoTokens.length; i++) {
+            codigoTokens[i] = new tabla();
         }
     }
     int getTamano(){
