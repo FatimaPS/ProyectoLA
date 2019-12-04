@@ -1,11 +1,10 @@
 .TITLE nombre ;
+222
 .VAR [
 $id1 ENT ;
 $id2 BOOLE ;
-
+222
      $id3 WORD ;
-
-
 
 
 #metodo1 {      } [

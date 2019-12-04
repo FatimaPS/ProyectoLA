@@ -125,8 +125,15 @@ public class lexico {
                 else if (l1.equals("#")) no =  metodoToken;
                 else no = nombreToken;
             }
+        }else {
+            int digito;
+            try{
+                digito = Integer.parseInt(dato);
+                no = 24;
+            }catch (Exception e){
+                no = 0;
+            }
         }
-
         return no;
     }
 
