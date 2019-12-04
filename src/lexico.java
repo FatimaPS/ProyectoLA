@@ -12,9 +12,10 @@ public class lexico {
     ArrayList<tabla> letras;
     ArrayList<tabla> digitos;
     ArrayList<tabla> nombre;
-    int contadorIdMetodo;
+    int idToken = 101;
+    int nombreToken = 100;
+    int metodoToken = 501;
     public lexico() {
-        contadorIdMetodo=100;
         archivo = new Archivo();
         palabrasReservadas = new ArrayList<>();
         delimitadores = new ArrayList<>();
@@ -78,10 +79,7 @@ public class lexico {
                     i++;
                 }
                 if (dato.length() >= 1 && existe == 0) { // nombres de id y metodos mayor a una letra o digito
-                    String c0 = "" + dato.charAt(0);
-                    if (c0.equals("$") || c0.equals("#")) {
-                        existe = verificarNombre(dato);
-                    }
+                    existe = verificarNombre(dato);
                 }
             } else {
                 if (dato.equals("\"")) existe = 35;
@@ -93,40 +91,46 @@ public class lexico {
     }
     int verificarNombre(String dato){
         int no = 0;
-        String l = ""+dato.charAt(1);
+        boolean b = true;
+        boolean aux;
+        int i = 1;
+        String l1 = ""+dato.charAt(0);
+        String l2 = ""+dato.charAt(1);
         boolean letra = false;
-        for (tabla d: letras) {
-            if (l.equals(d.getNombre())) letra = true;
+        if (l1.equals("$") || l1.equals("#")){
+            for (tabla d : letras)
+                if (l2.equals(d.getNombre())) letra = true;
+        }
+        else{
+            for (tabla p : letras)
+                if (l1.equals(p.getNombre())) letra = true;
         }
         if (letra){
-            boolean b = true;
-            boolean aux;
-            int i = 1, ok = 0;
             while (i < dato.length() && b){
                 int j = 0;
-                ok = 0;
                 aux = true;
-                l = ""+dato.charAt(i);
+                l1 = ""+dato.charAt(i);
                 while(j < nombre.size() && aux){
-                    if (l.equals(nombre.get(j).getNombre())){
-                        ok = 1;
+                    if (l1.equals(nombre.get(j).getNombre())){
                         aux = false;
                     }
                     j++;
                 }
-                if (ok == 0) b = false;
+                if (aux) b = false;
                 i++;
             }
             if (b){
-                l = ""+dato.charAt(0);
-                if (l.equals("$")) no =  idToken; // codigo para ids
-                else no = metodoToken;
+                l1 = ""+dato.charAt(0);
+                if (l1.equals("$")) no =  idToken;
+                else if (l1.equals("#")) no =  metodoToken;
+                else no = nombreToken;
             }
         }
+
         return no;
     }
-    int metodoToken = 501;
-    int idToken = 101;
+
+
     void cargarLenguaje(){
         String[] prs = archivo.leerCodigo("palabrasReservadas.txt").split("\n");
         String[] ds = archivo.leerCodigo("delimitadores.txt").split("\n");

@@ -62,7 +62,6 @@ public class Archivo {
                     for (int j = 0; j < i; j++) {
                         espacio+=" ";
                     }
-                    linea = linea.replaceFirst(espacio, "");
                     linea = linea.replaceAll(espacio, " ");
                 }
                 String uno = linea.charAt(0)+"";
