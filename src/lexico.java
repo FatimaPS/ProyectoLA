@@ -94,46 +94,56 @@ public class lexico {
         boolean b = true;
         boolean aux;
         int i = 1;
-        String l1 = ""+dato.charAt(0);
-        String l2 = ""+dato.charAt(1);
-        boolean letra = false;
-        if (l1.equals("$") || l1.equals("#")){
-            for (tabla d : letras)
-                if (l2.equals(d.getNombre())) letra = true;
-        }
-        else{
-            for (tabla p : letras)
-                if (l1.equals(p.getNombre())) letra = true;
-        }
-        if (letra){
-            while (i < dato.length() && b){
-                int j = 0;
-                aux = true;
-                l1 = ""+dato.charAt(i);
-                while(j < nombre.size() && aux){
-                    if (l1.equals(nombre.get(j).getNombre())){
-                        aux = false;
-                    }
-                    j++;
-                }
-                if (aux) b = false;
-                i++;
-            }
-            if (b){
+        int digito;
+        try{
+            digito = Integer.parseInt(dato);
+            no = 24;
+            b = false;
+        }catch (Exception e){ }
+        if (b){
+            boolean letra = false;
+            String l1 = ""+dato.charAt(0);
+            String l2 = ""+dato.charAt(1);
+            if (dato.length() > 1){
                 l1 = ""+dato.charAt(0);
-                if (l1.equals("$")) no =  idToken;
-                else if (l1.equals("#")) no =  metodoToken;
-                else no = nombreToken;
+                l2 = ""+dato.charAt(1);
+                if (l1.equals("$") || l1.equals("#")){
+                    for (tabla d : letras)
+                        if (l2.equals(d.getNombre())) letra = true;
+                }
+                else{
+                    for (tabla p : letras)
+                        if (l1.equals(p.getNombre())) letra = true;
+                }
+            }else{
+                l1 = ""+dato.charAt(0);
+                i = 0;
+                for (tabla d : letras)
+                    if (l1.equals(d.getNombre())) letra = true;
             }
-        }else {
-            int digito;
-            try{
-                digito = Integer.parseInt(dato);
-                no = 24;
-            }catch (Exception e){
-                no = 0;
+            if (letra){
+                while (i < dato.length() && b){
+                    int j = 0;
+                    aux = true;
+                    l1 = ""+dato.charAt(i);
+                    while(j < nombre.size() && aux){
+                        if (l1.equals(nombre.get(j).getNombre())){
+                            aux = false;
+                        }
+                        j++;
+                    }
+                    if (aux) b = false;
+                    i++;
+                }
+                if (b){
+                    l1 = ""+dato.charAt(0);
+                    if (l1.equals("$")) no =  idToken;
+                    else if (l1.equals("#")) no =  metodoToken;
+                    else no = nombreToken;
+                }
             }
         }
+
         return no;
     }
 
