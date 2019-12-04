@@ -1,9 +1,16 @@
-1 Palabra reservada mal escrita
-2 Falta ;
-3 Falta [ o {
-4 Falta ] o }
-5 Nombre de id incorrecto
-6 Tipo de dato incorrecto
-7 error en comillas
-8 Falta :
-9 Error en nombre de metodo
+0_FALTA END
+1_Palabra reservada mal escrita
+2_Falta ;
+3_Falta [ o {
+4_Falta ] o }
+5_Nombre de id incorrecto
+6_Tipo de dato incorrecto
+7_error en comillas
+8_Falta :
+9_Error en nombre de metodo
+10_error de sintaxis
+11_Valor o id incorrecto en condicion o parametro
+12_Operador logico no valido
+13_Falta simbolo !>
+14_Error en declaracion
+15_Operador aritmetico no valido

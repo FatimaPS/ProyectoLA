@@ -1,5 +1,6 @@
 .TITLE nombre ;
-222
+
+
 .VAR [
 $id1 ENT ;
 $id2 BOOLE ;

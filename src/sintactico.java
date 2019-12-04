@@ -17,12 +17,15 @@ public class sintactico {
         ids = new ArrayList<>();
         metodos = new ArrayList<>();
         apuntador = 0;
-        linea = 0;
+        linea = 1;
         contIds = 101;
         contMet = 501;
-
+        if (estructuraBasica()){
+            System.out.println("Todo ok");
+        }
     }
-    public void estructuraBasica (){
+    public boolean estructuraBasica (){
+        boolean correcto = false;
         salto();
         if (codigo[apuntador].token == 1){
             apuntador++;
@@ -39,34 +42,54 @@ public class sintactico {
                         if (codigo[apuntador].token == 30){
                             apuntador++;
                             salto();
-                            asignaciones();
-                            metodos();
-                            if (codigo[apuntador].token == 31){
-                                apuntador++;
-                                salto();
-                                if (codigo[apuntador].token == 3){
-                                    apuntador++;
-                                    salto();
-                                    if (codigo[apuntador].token == 30){
+                            boolean v = true;
+                            while (codigo[apuntador].token == 101 && v)
+                                v = asignaciones();
+                            if (v)
+                                while (codigo[apuntador].token == 501 && v)
+                                    v = metodos();
+                                if (v) {
+                                    if (codigo[apuntador].token == 31) {
                                         apuntador++;
                                         salto();
-                                        procesos();
-                                        if (codigo[apuntador].token == 31){
+                                        if (codigo[apuntador].token == 3) {
                                             apuntador++;
                                             salto();
-                                            if (codigo[apuntador].token == 4){
+                                            if (codigo[apuntador].token == 30) {
                                                 apuntador++;
                                                 salto();
-                                            } else error(1); //.end
-                                        } else error(4);  //]
-                                    } else error(3); //[
-                                } else error(1); //.code
-                            } else error(4);//]
+                                                v = true;
+                                                while (codigo[apuntador].token != 31 && v){
+                                                    v = procesos();
+                                                    apuntador++;
+                                                    salto();
+                                                }
+                                                if (v){
+                                                    if (codigo[apuntador].token == 31){
+                                                        apuntador++;
+                                                        salto();
+                                                        if (codigo[apuntador].token == 4) {
+                                                            correcto = true;
+                                                        }
+                                                        else {
+                                                            error(0); //]
+                                                            valido = false;
+                                                        }
+                                                    } else {
+                                                        error(4); //]
+                                                        valido = false;
+                                                    }
+                                                } else valido = false;
+                                            } else error(3); //[
+                                        } else error(1); //.code
+                                    } else error(4);//]
+                                }
                         } else error(3); //[
                     } else error(1); //.var
                 } else error(2); //;
             } else error(1); //nombre
         } else error(1);  //.title
+        return correcto;
     }
     public void salto(){
         while(codigo[apuntador].token == 39) {
@@ -82,278 +105,487 @@ public class sintactico {
      boolean valido;
     public boolean asignaciones(){
         valido=true;
-        if (codigo[apuntador].token != 31)
-            if (codigo[apuntador].token == 101){
-                tabla dato = new tabla(codigo[apuntador].nombre,contIds);
-                ids.add(dato);
-                contIds++;
+
+        tabla dato = new tabla(codigo[apuntador].nombre,contIds);
+        ids.add(dato);
+        contIds++;
+        apuntador++;
+        salto();
+        if (codigo[apuntador].token == 20 || codigo[apuntador].token == 21 || codigo[apuntador].token == 22 ){
+            apuntador++;
+            salto();
+            if (codigo[apuntador].token == 34){
                 apuntador++;
                 salto();
-                if (codigo[apuntador].token == 20 || codigo[apuntador].token == 21 || codigo[apuntador].token == 22 ){
+            } else {
+                valido=false;
+                error(2); //;
+            }
+        } else if (codigo[apuntador].token == 40){
                     apuntador++;
                     salto();
-                    if (codigo[apuntador].token == 34){
+                    if (codigo[apuntador].token == 24){
                         apuntador++;
                         salto();
-                        if (codigo[apuntador].token !=31){
-                            asignaciones();
-                        }
-                    } else error(2); //;
-                } else if (codigo[apuntador].token == 40){
+                        if (codigo[apuntador].token == 21){
                             apuntador++;
                             salto();
-                            if (codigo[apuntador].token == 24){
+                            if (codigo[apuntador].token == 34){
                                 apuntador++;
                                 salto();
-                                if (codigo[apuntador].token == 21){
+                            } else {
+                                valido=false;
+                                error(2); //;
+                            }
+                        } else {
+                            valido=false;
+                            error(6); //tipo erroneo
+                        }
+                    } else if (codigo[apuntador].token == 25 || codigo[apuntador].token == 26){
+                        apuntador++;
+                        salto();
+                        if (codigo[apuntador].token == 22){
+                            apuntador++;
+                            salto();
+                            if (codigo[apuntador].token == 34){
+                                apuntador++;
+                                salto();
+                            } else {
+                                valido=false;
+                                error(2); //;
+                            }
+                        } else {
+                            valido=false;
+                            error(6);
+                        }
+                    } else if (codigo[apuntador].token == 35){
+                            apuntador++;
+                            salto();
+                            while (codigo[apuntador].token == 23){
+                                apuntador++;
+                                salto();
+                            }
+                            if (codigo[apuntador].token == 35){
+                                apuntador++;
+                                salto();
+                                if (codigo[apuntador].token == 20){
                                     apuntador++;
                                     salto();
                                     if (codigo[apuntador].token == 34){
                                         apuntador++;
                                         salto();
-                                        if (codigo[apuntador].token !=31){
-                                            asignaciones();
-                                        }
-                                    } else error(2); //;
-                                } else error(6); //tipo erroneo
-                            } else if (codigo[apuntador].token == 25){
-                                        apuntador++;
-                                        salto();
-                                        if (codigo[apuntador].token == 22){
-                                            apuntador++;
-                                            salto();
-                                            if (codigo[apuntador].token == 34){
-                                                apuntador++;
-                                                salto();
-                                                if (codigo[apuntador].token !=31){
-                                                    asignaciones();
-                                                }
-                                            } else error(2); //;
-                                        } else error(6);
-                                    } else if (codigo[apuntador].token == 26){
-                                            apuntador++;
-                                            salto();
-                                            if (codigo[apuntador].token == 22){
-                                                apuntador++;
-                                                salto();
-                                                if (codigo[apuntador].token == 34){
-                                                    apuntador++;
-                                                    salto();
-                                                    if (codigo[apuntador].token !=31){
-                                                        asignaciones();
-                                                    }
-                                                } else error(2); //;
-                                            } else error(6);
-                                        } else if (codigo[apuntador].token == 35){
-                                                apuntador++;
-                                                salto();
-                                                while (codigo[apuntador].token == 23){
-                                                    apuntador++;
-                                                    salto();
-                                                }
-                                                    if (codigo[apuntador].token == 35){
-                                                        apuntador++;
-                                                        salto();
-                                                        if (codigo[apuntador].token == 20){
-                                                            apuntador++;
-                                                            salto();
-                                                            if (codigo[apuntador].token == 34){
-                                                                apuntador++;
-                                                                salto();
-                                                                if (codigo[apuntador].token !=31){
-                                                                    asignaciones();
-                                                                }
-                                                            } else error(2); //;
-                                                        } else error(6);
-                                                    } else error(7); //comillas
+                                    } else {
+                                        valido=false;
+                                        error(2); //;
+                                    }
+                                } else {
+                                    valido=false;
+                                    error(6);
+                                }
+                            } else {
+                                valido=false;
+                                error(7); //comillas
+                            }
+                    } else {
+                        valido=false;
+                        error(7);
+                    }
+                }
 
-                                            } else error(7);
-                        }
-
-            } else error(5);
-        else apuntador++;
         return valido;
     }
 
-    public void metodos(){
-        if (codigo[apuntador].token == 501){
-            tabla dato = new tabla(codigo[apuntador].nombre,contMet);
-            metodos.add(dato);
-            contMet++;
+    public boolean metodos() {
+        valido = true;
+        tabla dato = new tabla(codigo[apuntador].nombre, contMet);
+        metodos.add(dato);
+        contMet++;
+        apuntador++;
+        salto();
+        if (codigo[apuntador].token == 32) {
             apuntador++;
             salto();
-            if (codigo[apuntador].token == 32){
-                apuntador++;
-                salto();
-                if (buscarId(codigo[apuntador].token) || codigo[apuntador].token == 33){
-                    boolean puntos = true;
-                    while (buscarId(codigo[apuntador].token) && puntos){
-                        puntos = false;
+            if (buscarId(codigo[apuntador].token) || codigo[apuntador].token == 33) {
+                boolean puntos = true;
+                while (buscarId(codigo[apuntador].token) && puntos) {
+                    puntos = false;
+                    apuntador++;
+                    salto();
+                    if (codigo[apuntador].token == 38) {
+                        puntos = true;
                         apuntador++;
                         salto();
-                        if (codigo[apuntador].token == 38) {
-                            puntos = true;
+                    }
+                }
+                if (!puntos) {
+                    if (codigo[apuntador].token == 33) {
+                        apuntador++;
+                        salto();
+                        if (codigo[apuntador].token == 30) {
+                            apuntador++;
+                            salto();
+                            boolean v = true;
+                            while (codigo[apuntador].token != 31 && v){
+                                v = procesos();
+                                apuntador++;
+                                salto();
+                            }
+                            if (v){
+                                if (codigo[apuntador].token == 31){
+                                    apuntador++;
+                                    salto();
+                                } else {
+                                    error(4); //]
+                                    valido = false;
+                                }
+                            } else valido = false;
+                        } else{
+                            error(4);
+                            valido = false;
+                        }
+                    } else {
+                        error(3);
+                        valido = false;
+                    }
+                } else {
+                    error(8);
+                    valido = false;
+                }
+            } else {
+                error(4);
+                valido = false;
+            }
+        }else {
+            error(3);
+            valido = false;
+        }
+        return valido;
+    }
+
+    public boolean procesos(){
+        valido = true;
+        int opc = codigo[apuntador].token;
+        switch (opc){
+            case 27: valido = loop();
+            break;
+            case 10: valido = decisionIfElse();
+            break;
+            case 15: valido = EntradaSalida();
+            break;
+            case 16: valido = EntradaSalida();
+            break;
+            case 36: valido = comentarios();
+            break;
+            default:
+                if (buscarMet(opc)){
+                    llamaMetodo();
+                } else if (buscarId(opc))
+                    operaciones();
+                else error(10);
+        }
+        return valido;
+    }
+
+    public boolean loop() {
+        valido = true;
+        apuntador++;
+        salto();
+        if (codigo[apuntador].token == 32){
+            apuntador++;
+            salto();
+            if (buscarId(codigo[apuntador].token) || codigo[apuntador].token == 24){  //verificar los id
+                apuntador++;
+                salto();
+                if (codigo[apuntador].token == 33){
+                    apuntador++;
+                    salto();
+                    if (codigo[apuntador].token == 30){
+                        apuntador++;
+                        salto();
+                        boolean v = true;
+                        while (codigo[apuntador].token != 31 && v){
+                            v = procesos();
                             apuntador++;
                             salto();
                         }
-                    }
-                    //if ()
-
-
-
-
-
-                    apuntador++;
-                    salto();
-                    if (codigo[apuntador].token == 38){
-                        apuntador++;
-                        salto();
-                        if (buscarId(codigo[apuntador].token)){ //aqui van los id
-                            apuntador++;
-                            salto();
-                            if (codigo[apuntador].token == 33){
-                                apuntador++;
-                                salto();
-                                if (codigo[apuntador].token == 30){
-                                    apuntador++;
-                                    salto();
-                                    procesos();
-                                    if (codigo[apuntador].token == 31){
-                                        apuntador++;
-                                        salto();
-                                    } else error(4);//]
-                                } else error(3); //[
-                            } else error(4);//}
-                        } else error(5); //id
-                    } else error(8); // :
-                } else error(5);
-            } else error(4); //{
-        } else error(9);
-
-
-    }
-
-    public void procesos(){
-        loop();
-        operaciones();
-        llamaMetodo();
-        decisionIf();
-        decisionElse();
-        EntradaSalida();
-        comentarios();
-    }
-
-    public void loop() {
-        if (codigo[apuntador].token == 27){
-            apuntador++;
-            salto();
-            if (codigo[apuntador].token == 32){
-                apuntador++;
-                salto();
-                if (buscarId(codigo[apuntador].token) || codigo[apuntador].token == 24){  //verificar los id
-                    apuntador++;
-                    salto();
-                    if (codigo[apuntador].token == 33){
-                        apuntador++;
-                        salto();
-                        if (codigo[apuntador].token == 30){
-                            apuntador++;
-                            salto();
-                            procesos();
+                        if (v){
                             if (codigo[apuntador].token == 31){
                                 apuntador++;
                                 salto();
-                            } else error(4); //]
-                        } else error(3); //[
-                    } else error(4); //}
-                } else error(5); //no exsiste id
-            } else error(3); //{
-        } else error(1);
+                            } else {
+                                error(4); //]
+                                valido = false;
+                            }
+                        } else valido = false;
+                    } else {
+                        error(3); //]
+                        valido = false;
+                    }
+                } else {
+                    error(4); //]
+                    valido = false;
+                }
+            } else {
+                error(5); //]
+                valido = false;
+            }
+        } else {
+            error(3); //]
+            valido = false;
+        }
+        return valido;
     }
 
-    public void operaciones() {
+    public boolean operaciones() {
+        valido = true;
         if (buscarId(codigo[apuntador].token)){
             apuntador++;
             salto();
             if (codigo[apuntador].token == 40){
                 apuntador++;
                 salto();
-
-            } else if (codigo[apuntador].token == 41 || codigo[apuntador].token == 42 || codigo[apuntador].token == 43 || codigo[apuntador].token == 44){
-                        apuntador++;
-                        salto();
-                    }
-        } else error(5);
-    }
-
-    public void llamaMetodo() {
-        if (codigo[apuntador].token == 501){
-            apuntador++;
-            salto();
-            if (codigo[apuntador].token == 32){
-                apuntador++;
-                salto();
-                if (codigo[apuntador].token == 101){
+                if (codigo[apuntador].token == 24 || buscarId(codigo[apuntador].token)){
                     apuntador++;
                     salto();
-                    if (codigo[apuntador].token == 38){
+                } else if (codigo[apuntador].token == 35){
+                    apuntador++;
+                    salto();
+                    while (codigo[apuntador].token == 23){
                         apuntador++;
                         salto();
-                        if (codigo[apuntador].token == 101){
-                            apuntador++;
-                            salto();
-                            if (codigo[apuntador].token == 33){
-                                apuntador++;
-                                salto();
-                                if (codigo[apuntador].token == 34){
-                                    apuntador++;
-                                    salto();
-                                } //;
-                            }
-                        }
                     }
+                    if (codigo[apuntador].token == 35) {
+                        apuntador++;
+                        salto();
+                    } else {
+                        error(7);
+                        valido = false;
+                    }
+                } else {
+                    error(14);
+                    valido = false;
                 }
-            }
-        }
-    }
-
-    public void decisionIf() {
-
-    }
-
-    public void decisionElse() {
-        if (codigo[apuntador].token == 11){
-            apuntador++;
-            salto();
-            if (codigo[apuntador].token == 30){
-                apuntador++;
-                salto();
-                procesos();
-                if (codigo[apuntador].token == 31){
-                    apuntador++;
-                    salto();
-                } else error(4);
-            } else error(3);
-        } else error(1);
-    }
-
-    public void EntradaSalida() {
-        if (codigo[apuntador].token == 15 || codigo[apuntador].token == 16){
-            apuntador++;
-            salto();
-            if (codigo[apuntador].token == 101){
-                apuntador++;
-                salto();
                 if (codigo[apuntador].token == 34){
                     apuntador++;
                     salto();
-                } else error(2);
-            } else error(5);
-        } else error(1);
+                } else {
+                    error(2);
+                    valido = false;
+                }
+            } else if (codigo[apuntador].token >= 41 && codigo[apuntador].token <= 44){
+                apuntador++;
+                salto();
+                if (codigo[apuntador].token == 24 || buscarId(codigo[apuntador].token)) {
+                    apuntador++;
+                    salto();
+                    boolean puntos = true;
+                    while (codigo[apuntador].token == 38 && puntos) {
+                        puntos = false;
+                        apuntador++;
+                        salto();
+                        if (codigo[apuntador].token == 24 || buscarId(codigo[apuntador].token)) {
+                            puntos = true;
+                            apuntador++;
+                            salto();
+                        }
+                    }
+                    if (puntos){
+                        if (codigo[apuntador].token != 34){
+                            error(2);
+                            valido = false;
+                        }
+                    }else {
+                        error(11);
+                        valido = false;
+                    }
+                }  else {
+                    error(11);
+                    valido = false;
+                }
+            }else {
+                error(15);
+                valido = false;
+            }
+        } else {
+            valido = false;
+            error(5);
+        }
+        return valido;
     }
 
-    public void comentarios() {
-        if (codigo[apuntador].token == 36){
+    public boolean llamaMetodo() {
+        valido = true;
+        apuntador++;
+        salto();
+        if (codigo[apuntador].token == 32){
+            apuntador++;
+            salto();
+            if (buscarId(codigo[apuntador].token) || codigo[apuntador].token == 33) {
+                boolean puntos = true;
+                while (buscarId(codigo[apuntador].token) && puntos) {
+                    puntos = false;
+                    apuntador++;
+                    salto();
+                    if (codigo[apuntador].token == 38) {
+                        puntos = true;
+                        apuntador++;
+                        salto();
+                    }
+                }
+                if (!puntos){
+                    if (codigo[apuntador].token == 33){
+                        apuntador++;
+                        salto();
+                        if (codigo[apuntador].token == 34){
+                            apuntador++;
+                            salto();
+                        }  else {
+                            error(2);
+                            valido = false;
+                        }
+                    } else {
+                        error(4);
+                        valido = false;
+                    }
+                }else {
+                    error(11);
+                    valido = false;
+                }
+            }  else {
+                error(11);
+                valido = false;
+            }
+        }  else {
+            error(3);
+            valido = false;
+        }
+
+        return valido;
+    }
+
+    public boolean decisionIfElse() {
+        valido = true;
+        apuntador++;
+        salto();
+        if (codigo[apuntador].token == 32){
+            apuntador++;
+            salto();
+            if (buscarId(codigo[apuntador].token) || codigo[apuntador].token == 24) {
+                apuntador++;
+                salto();
+                if (codigo[apuntador].token >= 45 && codigo[apuntador].token <= 48) {
+                    apuntador++;
+                    salto();
+                    if (buscarId(codigo[apuntador].token) || codigo[apuntador].token == 24) {
+                        apuntador++;
+                        salto();
+                        if (codigo[apuntador].token == 33) {
+                            apuntador++;
+                            salto();
+                            if (codigo[apuntador].token == 30){
+                                apuntador++;
+                                salto();
+                                boolean v = true;
+                                while (codigo[apuntador].token != 31 && v){
+                                    v = procesos();
+                                    apuntador++;
+                                    salto();
+                                }
+                                if (v){
+                                    if (codigo[apuntador].token == 31){
+                                        apuntador++;
+                                        salto();
+                                        if (codigo[apuntador].token == 11) {
+                                            apuntador++;
+                                            salto();
+                                            valido = decisionElse();
+                                        }
+                                    } else {
+                                        error(4);
+                                        valido = false;
+                                    }
+                                } else valido = false;
+                            } else {
+                                error(3);
+                                valido = false;
+                            }
+                        } else {
+                            error(4);
+                            valido = false;
+                        }
+                    } else {
+                        error(11);
+                        valido = false;
+                    }
+                } else {
+                    error(12);
+                    valido = false;
+                }
+            } else {
+                error(11);
+                valido = false;
+            }
+        }  else {
+            error(3);
+            valido = false;
+        }
+
+        return valido;
+    }
+
+    public boolean decisionElse() {
+        valido = true;
+        apuntador++;
+        salto();
+        if (codigo[apuntador].token == 30){
+            apuntador++;
+            salto();
+            boolean v = true;
+            while (codigo[apuntador].token != 31 && v){
+                v = procesos();
+                apuntador++;
+                salto();
+            }
+            if (v){
+                if (codigo[apuntador].token == 31){
+                    apuntador++;
+                    salto();
+                } else {
+                    error(4);
+                    valido = false;
+                }
+            }else valido = false;
+        } else {
+            error(3);
+            valido = false;
+        }
+       return valido;
+    }
+
+    public boolean EntradaSalida() {
+        valido = true;
+        apuntador++;
+        salto();
+        if (buscarId(codigo[apuntador].token)){
+            apuntador++;
+            salto();
+            if (codigo[apuntador].token == 34){
+                apuntador++;
+                salto();
+            } else {
+                error(2);
+                valido = false;
+            }
+        } else {
+            error(5);
+            valido = false;
+        }
+        return valido;
+    }
+
+    public boolean comentarios() {
+        valido = true;
+
             apuntador++;
             salto();
             while (codigo[apuntador].token == 23){
@@ -363,9 +595,12 @@ public class sintactico {
             if (codigo[apuntador].token == 37){
                         apuntador++;
                         salto();
+            }else {
+                error(13);
+                valido = false;
             }
 
-        }
+        return valido;
     }
 
     boolean idValido;
@@ -395,7 +630,20 @@ public class sintactico {
 
     public String tipoError(int no){
         String error="";
-
+        Archivo archivo = new Archivo();
+        ArrayList<tabla> erro = new ArrayList<>();
+        String[] errores = archivo.leerCodigo("errores.txt").split("\n");
+        tabla dato;
+        for (int i = 0; i < errores.length; i++) {
+            String[] separador = errores[i].split("_");
+            String nombre = separador[1];
+            String token = separador[0];
+            dato = new tabla(nombre, Integer.parseInt(token.trim()));
+            erro.add(dato);
+        }
+        for (tabla d: erro){
+            if (d.token == no) error = d.nombre;
+        }
         return error;
     }
 
