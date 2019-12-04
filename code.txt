@@ -1,8 +1,13 @@
-$caa
- $asdas22sad2
+.TITLE nombre ;
+.VAR [
+$id1 ENT;
+$id2 BOOLE;
+$id3 WORD;
+#metodo1 {  } [
+]
+]
+.CODE [
+]
+.END
 
 
-                          IF
-
-     #metdo
-#me113

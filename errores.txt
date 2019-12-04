@@ -1,2 +1,9 @@
-1-Palabra reservada mal escrita
-2-
+1 Palabra reservada mal escrita
+2 Falta ;
+3 Falta [ o {
+4 Falta ] o }
+5 Nombre de id incorrecto
+6 Tipo de dato incorrecto
+7 error en comillas
+8 Falta :
+9 Error en nombre de metodo
