@@ -1,18 +1,18 @@
 .TITLE nombre ;
 
-
 .VAR [
 $id1 ENT ;
-$id2 BOOLE ;
-222
-     $id3 WORD ;
-
-
-#metodo1 {      } [
-
+$num = VA BOOLE ;
+#metodo { $id1 : $id1 } [
 
 ]
 ]
 .CODE [
+IF { $id1 < $id1 }
+[
+LOOP { 55 } [
+]
+]
+
 ]
 .END

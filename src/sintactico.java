@@ -1,3 +1,5 @@
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
+
 import java.util.ArrayList;
 
 public class sintactico {
@@ -61,8 +63,8 @@ public class sintactico {
                                                 v = true;
                                                 while (codigo[apuntador].token != 31 && v){
                                                     v = procesos();
-                                                    apuntador++;
-                                                    salto();
+                                                        apuntador++;
+                                                        salto();
                                                 }
                                                 if (v){
                                                     if (codigo[apuntador].token == 31){
@@ -93,8 +95,15 @@ public class sintactico {
     }
     public void salto(){
         while(codigo[apuntador].token == 39) {
-            apuntador++;
-            linea++;
+                apuntador++;
+                linea++;
+        }
+    }
+    public void saltoAtras(){
+        apuntador--;
+        while(codigo[apuntador].token == 39) {
+            apuntador--;
+            linea--;
         }
     }
     public void error(int no){
@@ -105,7 +114,6 @@ public class sintactico {
      boolean valido;
     public boolean asignaciones(){
         valido=true;
-
         tabla dato = new tabla(codigo[apuntador].nombre,contIds);
         ids.add(dato);
         contIds++;
@@ -283,11 +291,14 @@ public class sintactico {
                     operaciones();
                 else error(10);
         }
+
+
         return valido;
     }
 
     public boolean loop() {
         valido = true;
+
         apuntador++;
         salto();
         if (codigo[apuntador].token == 32){
@@ -310,8 +321,6 @@ public class sintactico {
                         }
                         if (v){
                             if (codigo[apuntador].token == 31){
-                                apuntador++;
-                                salto();
                             } else {
                                 error(4); //]
                                 valido = false;
@@ -366,8 +375,7 @@ public class sintactico {
                     valido = false;
                 }
                 if (codigo[apuntador].token == 34){
-                    apuntador++;
-                    salto();
+
                 } else {
                     error(2);
                     valido = false;
@@ -391,8 +399,7 @@ public class sintactico {
                     }
                     if (puntos){
                         if (codigo[apuntador].token != 34){
-                            error(2);
-                            valido = false;
+
                         }
                     }else {
                         error(11);
@@ -437,8 +444,7 @@ public class sintactico {
                         apuntador++;
                         salto();
                         if (codigo[apuntador].token == 34){
-                            apuntador++;
-                            salto();
+
                         }  else {
                             error(2);
                             valido = false;
@@ -499,7 +505,7 @@ public class sintactico {
                                             apuntador++;
                                             salto();
                                             valido = decisionElse();
-                                        }
+                                        } else saltoAtras();
                                     } else {
                                         error(4);
                                         valido = false;
@@ -548,8 +554,6 @@ public class sintactico {
             }
             if (v){
                 if (codigo[apuntador].token == 31){
-                    apuntador++;
-                    salto();
                 } else {
                     error(4);
                     valido = false;
@@ -570,8 +574,6 @@ public class sintactico {
             apuntador++;
             salto();
             if (codigo[apuntador].token == 34){
-                apuntador++;
-                salto();
             } else {
                 error(2);
                 valido = false;
@@ -593,8 +595,6 @@ public class sintactico {
                 salto();
             }
             if (codigo[apuntador].token == 37){
-                        apuntador++;
-                        salto();
             }else {
                 error(13);
                 valido = false;
