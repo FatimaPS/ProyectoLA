@@ -10,10 +10,6 @@ public class sintactico {
     int contMet;
     int apuntador;
     int linea;
-    public sintactico() {
-
-    }
-
     public sintactico(tabla[] codigo) {
         this.codigo = codigo;
         ids = new ArrayList<>();
@@ -25,6 +21,8 @@ public class sintactico {
         if (estructuraBasica()){
             System.out.println("Todo ok");
         }
+        System.out.println("-----------------------------------------------");
+        System.out.println("\n\n");
     }
     public boolean estructuraBasica (){
         boolean correcto = false;
@@ -111,7 +109,7 @@ public class sintactico {
         System.out.println("Tipo de error: "+tipoError(no));
     }
 
-     boolean valido;
+    boolean valido;
     public boolean asignaciones(){
         valido=true;
         tabla dato = new tabla(codigo[apuntador].nombre,contIds);
@@ -213,9 +211,9 @@ public class sintactico {
         if (codigo[apuntador].token == 32) {
             apuntador++;
             salto();
-            if (buscarId(codigo[apuntador].token) || codigo[apuntador].token == 33) {
+            if (buscarId(codigo[apuntador].nombre) || codigo[apuntador].token == 33) {
                 boolean puntos = true;
-                while (buscarId(codigo[apuntador].token) && puntos) {
+                while (buscarId(codigo[apuntador].nombre) && puntos) {
                     puntos = false;
                     apuntador++;
                     salto();
@@ -285,9 +283,9 @@ public class sintactico {
             case 36: valido = comentarios();
             break;
             default:
-                if (buscarMet(opc)){
+                if (buscarMet(codigo[apuntador].nombre)){
                     llamaMetodo();
-                } else if (buscarId(opc))
+                } else if (buscarId(codigo[apuntador].nombre))
                     operaciones();
                 else error(10);
         }
@@ -304,7 +302,7 @@ public class sintactico {
         if (codigo[apuntador].token == 32){
             apuntador++;
             salto();
-            if (buscarId(codigo[apuntador].token) || codigo[apuntador].token == 24){  //verificar los id
+            if (buscarId(codigo[apuntador].nombre) || codigo[apuntador].token == 24){  //verificar los id
                 apuntador++;
                 salto();
                 if (codigo[apuntador].token == 33){
@@ -347,13 +345,13 @@ public class sintactico {
 
     public boolean operaciones() {
         valido = true;
-        if (buscarId(codigo[apuntador].token)){
+        if (buscarId(codigo[apuntador].nombre)){
             apuntador++;
             salto();
             if (codigo[apuntador].token == 40){
                 apuntador++;
                 salto();
-                if (codigo[apuntador].token == 24 || buscarId(codigo[apuntador].token)){
+                if (codigo[apuntador].token == 24 || buscarId(codigo[apuntador].nombre)){
                     apuntador++;
                     salto();
                 } else if (codigo[apuntador].token == 35){
@@ -383,7 +381,7 @@ public class sintactico {
             } else if (codigo[apuntador].token >= 41 && codigo[apuntador].token <= 44){
                 apuntador++;
                 salto();
-                if (codigo[apuntador].token == 24 || buscarId(codigo[apuntador].token)) {
+                if (codigo[apuntador].token == 24 || buscarId(codigo[apuntador].nombre)) {
                     apuntador++;
                     salto();
                     boolean puntos = true;
@@ -391,7 +389,7 @@ public class sintactico {
                         puntos = false;
                         apuntador++;
                         salto();
-                        if (codigo[apuntador].token == 24 || buscarId(codigo[apuntador].token)) {
+                        if (codigo[apuntador].token == 24 || buscarId(codigo[apuntador].nombre)) {
                             puntos = true;
                             apuntador++;
                             salto();
@@ -427,9 +425,9 @@ public class sintactico {
         if (codigo[apuntador].token == 32){
             apuntador++;
             salto();
-            if (buscarId(codigo[apuntador].token) || codigo[apuntador].token == 33) {
+            if (buscarId(codigo[apuntador].nombre) || codigo[apuntador].token == 33) {
                 boolean puntos = true;
-                while (buscarId(codigo[apuntador].token) && puntos) {
+                while (buscarId(codigo[apuntador].nombre) && puntos) {
                     puntos = false;
                     apuntador++;
                     salto();
@@ -476,13 +474,13 @@ public class sintactico {
         if (codigo[apuntador].token == 32){
             apuntador++;
             salto();
-            if (buscarId(codigo[apuntador].token) || codigo[apuntador].token == 24) {
+            if (buscarId(codigo[apuntador].nombre) || codigo[apuntador].token == 24) {
                 apuntador++;
                 salto();
                 if (codigo[apuntador].token >= 45 && codigo[apuntador].token <= 48) {
                     apuntador++;
                     salto();
-                    if (buscarId(codigo[apuntador].token) || codigo[apuntador].token == 24) {
+                    if (buscarId(codigo[apuntador].nombre) || codigo[apuntador].token == 24) {
                         apuntador++;
                         salto();
                         if (codigo[apuntador].token == 33) {
@@ -570,7 +568,7 @@ public class sintactico {
         valido = true;
         apuntador++;
         salto();
-        if (buscarId(codigo[apuntador].token)){
+        if (buscarId(codigo[apuntador].nombre)){
             apuntador++;
             salto();
             if (codigo[apuntador].token == 34){
@@ -604,23 +602,24 @@ public class sintactico {
     }
 
     boolean idValido;
-    public boolean buscarId(int id){
+    public boolean buscarId(String nombre){
         idValido = false;
         int i = 0;
         while (i < ids.size()){
-            if (ids.get(i).getToken() == id)
+            if (ids.get(i).nombre.equals(nombre)) {
                 idValido = true;
-                i++;
+            }
+            i++;
         }
         return idValido;
     }
 
     boolean metValido;
-    public boolean buscarMet(int id){
+    public boolean buscarMet(String nombre){
         metValido = false;
         int i = 0;
         while (i < metodos.size()){
-            if (metodos.get(i).getToken() == id)
+            if (metodos.get(i).nombre.equals(nombre))
                 metValido = true;
             i++;
         }

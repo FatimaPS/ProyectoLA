@@ -3,12 +3,9 @@ import java.io.*;
 public class LAutomata {
     public LAutomata() {
         lexico lexico = new lexico();
-        tabla[] tokens = lexico.codigoTokens;
-        for (int i = 0; i < tokens.length; i++) {
-            System.out.print(i+"-"+tokens[i].token+" ");
+        if (lexico.errores == 0 ){
+            tabla[] tokens = lexico.codigoTokens;
+            sintactico sintactico = new sintactico(tokens);
         }
-        System.out.println();
-        sintactico sintactico = new sintactico(tokens);
-
     }
 }

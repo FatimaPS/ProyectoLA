@@ -1,16 +1,21 @@
 .TITLE nombre ;
-
 .VAR [
 $id1 ENT ;
 $num = VA BOOLE ;
 #metodo { $id1 : $id1 } [
+    IF { $id1 < $id1 } [
+    <! comentario dos !>
+    LOOP { 5 } [
+        $id1 + 55 : 11 ;
 
+    ]
+    ]
 ]
 ]
 .CODE [
 IF { $id1 < $id1 }
 [
-LOOP { 55 } [
+LOOP { 5 } [
 ]
 ]
 

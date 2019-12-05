@@ -15,6 +15,7 @@ public class lexico {
     int idToken = 101;
     int nombreToken = 100;
     int metodoToken = 501;
+    int errores;
     public lexico() {
         archivo = new Archivo();
         palabrasReservadas = new ArrayList<>();
@@ -27,7 +28,7 @@ public class lexico {
         code = archivo.leerCodigo("code.txt");
         codigoTokens = new tabla[getTamano()];
         cargarLenguaje();
-        int errores = analizar();
+        errores = analizar();
         if (errores != 0) System.out.println(codigoString.get(errores)+" No pertenece al lenguaje");
     }
     int analizar(){
