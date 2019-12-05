@@ -30,6 +30,8 @@ public class lexico {
         cargarLenguaje();
         errores = analizar();
         if (errores != 0) System.out.println(codigoString.get(errores)+" No pertenece al lenguaje");
+        else System.out.println("LEXICO OK");
+        System.out.println("---------------------------------");
     }
     int analizar(){
         int error = 0;
@@ -58,7 +60,7 @@ public class lexico {
         int i ;
         if (!dato.equals("\n")) {
             if ((dato.equals("\"") || dato.equals("<!")) && !coco) coco = true;
-            else if ((dato.equals("\"") || dato.equals("!>")) && coco) coco = false;
+            else if ((dato.equals("\"") ) && coco) coco = false;
             if (!coco) {
                 i = 0;
                 while (i < palabrasReservadas.size() && existe == 0) {
@@ -85,6 +87,7 @@ public class lexico {
             } else {
                 if (dato.equals("\"")) existe = 35;
                 else if (dato.equals("<!")) existe = 36;
+                else if (dato.equals("!>")){ existe = 37; coco = false; }
                 else existe = 23;
             }
         }else existe = 39;

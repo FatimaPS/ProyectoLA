@@ -1,23 +1,31 @@
-.TITLE nombre ;
-.VAR [
-$id1 ENT ;
-$num = VA BOOLE ;
-#metodo { $id1 : $id1 } [
-    IF { $id1 < $id1 } [
-    <! comentario dos !>
-    LOOP { 5 } [
-        $id1 + 55 : 11 ;
+.TITLE prog1 ;
 
+.VAR [
+    $id1 ENT ;
+    $id2 WORD ;
+    $id3 WORD ;
+    $num = VA BOOLE ;
+
+    #Met11 { $id2 : $id3 : $id1 : $num } [
+        $id2 = " texto texto " ;
+
+        IF { 9 < $num } [
+            <! comentario !>
+        ] ELSE
+        [
+
+        ]
     ]
-    ]
-]
 ]
 .CODE [
-IF { $id1 < $id1 }
-[
-LOOP { 5 } [
-]
+    $num = 56 ;
+    $id1 * 58 : 5 : $id2 ;
+
+    #Met11 { $id2 : $id3 : $id1 : $num } ;
+
+    >> $num ;
 ]
 
-]
 .END
+
+

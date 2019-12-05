@@ -70,6 +70,15 @@ public class sintactico {
                                                         salto();
                                                         if (codigo[apuntador].token == 4) {
                                                             correcto = true;
+                                                            apuntador++;
+                                                            while(apuntador < codigo.length && correcto){
+                                                                if (codigo[apuntador].token != 39)
+                                                                    correcto = false;
+                                                                else linea++;
+                                                                    apuntador++;
+                                                            }
+                                                            if (!correcto) error(10);
+
                                                         }
                                                         else {
                                                             error(0); //]
@@ -254,7 +263,7 @@ public class sintactico {
                         valido = false;
                     }
                 } else {
-                    error(8);
+                    error(10);
                     valido = false;
                 }
             } else {
@@ -284,10 +293,13 @@ public class sintactico {
             break;
             default:
                 if (buscarMet(codigo[apuntador].nombre)){
-                    llamaMetodo();
+                    valido = llamaMetodo();
                 } else if (buscarId(codigo[apuntador].nombre))
-                    operaciones();
-                else error(10);
+                    valido = operaciones();
+                else {
+                    valido = false;
+                    error(10);
+                }
         }
 
 
@@ -357,25 +369,23 @@ public class sintactico {
                 } else if (codigo[apuntador].token == 35){
                     apuntador++;
                     salto();
-                    while (codigo[apuntador].token == 23){
+                    while (codigo[apuntador].token == 23 || codigo[apuntador].token == 39 ){
                         apuntador++;
-                        salto();
                     }
                     if (codigo[apuntador].token == 35) {
                         apuntador++;
                         salto();
+                        if (codigo[apuntador].token == 34){
+                        } else {
+                            error(2);
+                            valido = false;
+                        }
                     } else {
                         error(7);
                         valido = false;
                     }
                 } else {
                     error(14);
-                    valido = false;
-                }
-                if (codigo[apuntador].token == 34){
-
-                } else {
-                    error(2);
                     valido = false;
                 }
             } else if (codigo[apuntador].token >= 41 && codigo[apuntador].token <= 44){
@@ -444,7 +454,7 @@ public class sintactico {
                         if (codigo[apuntador].token == 34){
 
                         }  else {
-                            error(2);
+                            error(10);
                             valido = false;
                         }
                     } else {
@@ -492,8 +502,10 @@ public class sintactico {
                                 boolean v = true;
                                 while (codigo[apuntador].token != 31 && v){
                                     v = procesos();
-                                    apuntador++;
-                                    salto();
+                                    if (v){
+                                        apuntador++;
+                                        salto();
+                                    }
                                 }
                                 if (v){
                                     if (codigo[apuntador].token == 31){
@@ -539,8 +551,6 @@ public class sintactico {
 
     public boolean decisionElse() {
         valido = true;
-        apuntador++;
-        salto();
         if (codigo[apuntador].token == 30){
             apuntador++;
             salto();
@@ -585,19 +595,20 @@ public class sintactico {
 
     public boolean comentarios() {
         valido = true;
-
             apuntador++;
-            salto();
-            while (codigo[apuntador].token == 23){
-                apuntador++;
-                salto();
+            boolean com = true;
+            while (com){
+                if (codigo[apuntador].token == 23 || codigo[apuntador].token == 39 && apuntador+1 != codigo.length)
+                    apuntador++;
+                else com = false;
             }
             if (codigo[apuntador].token == 37){
+
             }else {
                 error(13);
                 valido = false;
+                apuntador--;
             }
-
         return valido;
     }
 
